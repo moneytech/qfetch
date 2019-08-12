@@ -26,7 +26,7 @@ all: $(OBJ)
 clean:
 	rm -f $(OBJ) $(EXE)
 
-install: all
+install:
 	mkdir -p $(DESTDIR)$(PREFIX)
 	cp $(EXE) $(DESTDIR)$(PREFIX)/
 
