@@ -22,6 +22,7 @@
 #define RESET   "\e[0m"
 
 void img_printf(const char* img, const char* message, ...);
+void cpuid(unsigned int* eax, unsigned int* ebx, unsigned int* ecx, unsigned int* edx);
 
 // Logo.
 const char* line1 = "   cccccccccccccccccccccccccccccccccccccccccc    ";
@@ -52,7 +53,7 @@ char dashes[1024]   = {0}; // Ditto.
 
 int main(void) {
     // User and host.
-    char *username = getpwuid(geteuid())->pw_name;
+    char* username = getpwuid(geteuid())->pw_name;
     gethostname(hostname, 1024);
 
     // Dashes
@@ -62,7 +63,10 @@ int main(void) {
         strcat(dashes, "-");
 
     // Terminal.
-    char* tty_name = ctermid(NULL);
+    char* tty_name = ttyname(STDIN_FILENO);
+
+    // Shell detection.
+    char* shell = getpwuid(geteuid())->pw_shell;
 
     // Print the info and logo.
     img_printf(line1, "");
@@ -73,10 +77,10 @@ int main(void) {
     img_printf(line6, "");
     img_printf(line7, "%sOS%s: qword", MAGENTA_FG, RESET);
     img_printf(line8, "%sTerminal%s: %s", MAGENTA_FG, RESET, tty_name);
-    img_printf(line9, "");
-    img_printf(lineA, "");
-    img_printf(lineB, "");
-    img_printf(lineC, "");
+    img_printf(line9, "%sShell%s: %s", MAGENTA_FG, RESET, shell);
+    img_printf(lineA, "%sResolution%s: %s", MAGENTA_FG, RESET, "Unknown");
+    img_printf(lineB, "%sCPU%s: %s", MAGENTA_FG, RESET, "Generic x86_64");
+    img_printf(lineC, "%sGPU%s: %s", MAGENTA_FG, RESET, "Generic VESA device");
     img_printf(lineD, "");
     img_printf(lineE, "");
     img_printf(lineF, "");
