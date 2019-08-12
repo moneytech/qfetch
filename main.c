@@ -61,6 +61,9 @@ int main(void) {
     for (size_t i = 0; i != dashes_length; i++)
         strcat(dashes, "-");
 
+    // Terminal.
+    char* tty_name = ctermid(NULL);
+
     // Print the info and logo.
     img_printf(line1, "");
     img_printf(line2, "");
@@ -68,8 +71,8 @@ int main(void) {
     img_printf(line4, "%s%s%s@%s%s%s", CYAN_FG, username, RESET, MAGENTA_FG, hostname, RESET);
     img_printf(line5, "%s", dashes);
     img_printf(line6, "");
-    img_printf(line7, "%sOS:%s qword", MAGENTA_FG, RESET);
-    img_printf(line8, "");
+    img_printf(line7, "%sOS%s: qword", MAGENTA_FG, RESET);
+    img_printf(line8, "%sTerminal%s: %s", MAGENTA_FG, RESET, tty_name);
     img_printf(line9, "");
     img_printf(lineA, "");
     img_printf(lineB, "");
