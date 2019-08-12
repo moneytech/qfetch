@@ -3,6 +3,7 @@
 #include <stddef.h>
 #include <string.h>
 #include <unistd.h>
+#include <pwd.h>
 
 #define CYAN    "\e[46m"
 #define MAGENTA "\e[45m"
@@ -14,12 +15,11 @@
 
 #define RESET   "\e[0m"
 
-char username[1024]; // So we don't use 1 KiB of stack for a username
-char hostname[1024]; // Ditto.
+char hostname[1024]; // So we don't use 1 KiB of stack for a hostname.
 
 int main(void) {
     // User and host.
-    getlogin_r(username, 1024);
+    char *username = getpwuid(geteuid())->pw_name;
     gethostname(hostname, 1024);
 
     // Dashes.
