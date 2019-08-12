@@ -5,6 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <pwd.h>
+#include <sys/utsname.h>
 
 #define BLACK   "\e[40m"      /* Black */
 #define RED     "\e[41m"      /* Red */
@@ -61,6 +62,12 @@ int main(void) {
     char* username = getpwuid(geteuid())->pw_name;
     gethostname(hostname, 1024);
 
+    // OS detection.
+    struct utsname buffer;
+    uname(&buffer);
+    char* os      = buffer.sysname;
+    char* machine = buffer.machine;
+
     // Dashes
     size_t dashes_length = strlen(username) + strlen(hostname) + 1;
 
@@ -83,7 +90,7 @@ int main(void) {
     img_printf(line4, "%s%s%s@%s%s%s", CYAN_FG, username, RESET, MAGENTA_FG, hostname, RESET);
     img_printf(line5, "%s", dashes);
     img_printf(line6, "");
-    img_printf(line7, "%sOS%s: qword", MAGENTA_FG, RESET);
+    img_printf(line7, "%sOS%s: %s (%s)", MAGENTA_FG, RESET, os, machine);
     img_printf(line8, "%sTerminal%s: %s", MAGENTA_FG, RESET, tty_name);
     img_printf(line9, "%sShell%s: %s", MAGENTA_FG, RESET, shell);
     img_printf(lineA, "%sResolution%s: %s", MAGENTA_FG, RESET, "Unknown");
