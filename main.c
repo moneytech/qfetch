@@ -6,15 +6,19 @@
 #include <unistd.h>
 #include <pwd.h>
 
-#define CYAN    "\e[46m"
-#define MAGENTA "\e[45m"
-#define GREY    "\e[47m"
-#define BLACK   "\e[40m"
+#define BLACK   "\e[40m"      /* Black */
+#define RED     "\e[41m"      /* Red */
+#define GREEN   "\e[42m"      /* Green */
+#define YELLOW  "\e[43m"      /* Yellow */
+#define BLUE    "\e[44m"      /* Blue */
+#define MAGENTA "\e[45m"      /* Magenta */
+#define CYAN    "\e[46m"      /* Cyan */
+#define WHITE   "\e[47m"      /* White */
 
+#define BLACK_CHAR   'N'
 #define CYAN_CHAR    'c'
 #define MAGENTA_CHAR 'y'
-#define GREY_CHAR    'W'
-#define BLACK_CHAR   'N'
+#define WHITE_CHAR   'W'
 
 #define CYAN_FG    "\e[36m"
 #define MAGENTA_FG "\e[35m"
@@ -45,7 +49,7 @@ const char* lineH = "   ccccccyyyyyyyyyyyyyyyWWWWWyyyyyyyyyyNccccc    ";
 const char* lineI = "   ccccccyyyyyyyyyyyyyyyWWWWWyyyyyyyyyyNccccc    ";
 const char* lineJ = "   cccccccNNNNNNNNNNNNNNWWWWWNNNNNNNNNNNccccc    ";
 const char* lineK = "   cccccccccccccccccccccWWWWWNccccccccccccccc    ";
-const char* lineL = "   cccccccccccccccccccccNNNNNNccccccccccccccc    ";
+const char* lineL = "   ccccccccccccccccccccccNNNNNccccccccccccccc    ";
 const char* lineM = "   cccccccccccccccccccccccccccccccccccccccccc    ";
 
 char hostname[1024] = {0}; // So we don't use 1 KiB of stack for a hostname.
@@ -86,7 +90,7 @@ int main(void) {
     img_printf(lineB, "%sCPU%s: %s", MAGENTA_FG, RESET, cpuname);
     img_printf(lineC, "%sGPU%s: %s", MAGENTA_FG, RESET, "Generic VESA device");
     img_printf(lineD, "");
-    img_printf(lineE, "");
+    img_printf(lineE, "%s   %s   %s   %s   %s   %s   %s   %s   %s", BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET);
     img_printf(lineF, "");
     img_printf(lineG, "");
     img_printf(lineH, "");
@@ -112,8 +116,8 @@ void img_printf(const char* img, const char* message, ...) {
             case MAGENTA_CHAR:
                 printf("%s %s", MAGENTA, RESET);
                 break;
-            case GREY_CHAR:
-                printf("%s %s", GREY, RESET);
+            case WHITE_CHAR:
+                printf("%s %s", WHITE, RESET);
                 break;
             case BLACK_CHAR:
                 printf("%s %s", BLACK, RESET);
