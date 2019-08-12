@@ -22,7 +22,7 @@
 #define RESET   "\e[0m"
 
 void img_printf(const char* img, const char* message, ...);
-void cpuid(unsigned int* eax, unsigned int* ebx, unsigned int* ecx, unsigned int* edx);
+void get_cpu_name(char *str);
 
 // Logo.
 const char* line1 = "   cccccccccccccccccccccccccccccccccccccccccc    ";
@@ -50,6 +50,7 @@ const char* lineM = "   cccccccccccccccccccccccccccccccccccccccccc    ";
 
 char hostname[1024] = {0}; // So we don't use 1 KiB of stack for a hostname.
 char dashes[1024]   = {0}; // Ditto.
+char cpuname[1024]  = {0}; // Ditto.
 
 int main(void) {
     // User and host.
@@ -68,6 +69,9 @@ int main(void) {
     // Shell detection.
     char* shell = getpwuid(geteuid())->pw_shell;
 
+    // CPU detection.
+    get_cpu_name(cpuname);
+
     // Print the info and logo.
     img_printf(line1, "");
     img_printf(line2, "");
@@ -79,7 +83,7 @@ int main(void) {
     img_printf(line8, "%sTerminal%s: %s", MAGENTA_FG, RESET, tty_name);
     img_printf(line9, "%sShell%s: %s", MAGENTA_FG, RESET, shell);
     img_printf(lineA, "%sResolution%s: %s", MAGENTA_FG, RESET, "Unknown");
-    img_printf(lineB, "%sCPU%s: %s", MAGENTA_FG, RESET, "Generic x86_64");
+    img_printf(lineB, "%sCPU%s: %s", MAGENTA_FG, RESET, cpuname);
     img_printf(lineC, "%sGPU%s: %s", MAGENTA_FG, RESET, "Generic VESA device");
     img_printf(lineD, "");
     img_printf(lineE, "");
@@ -122,4 +126,35 @@ void img_printf(const char* img, const char* message, ...) {
     vprintf(message, args);
     putchar('\n');
     va_end(args);
+}
+
+void get_cpu_name(char *str) {
+    asm volatile (
+        "mov eax, 0x80000002;"
+        "cpuid;"
+        "stosd;"
+        "mov eax, ebx;"
+        "stosd;"
+        "mov eax, ecx;"
+        "stosd;"
+        "mov eax, edx;"
+        "stosd;"
+        "mov eax, 0x80000003;"
+        "cpuid;"
+        "stosd;"
+        "mov eax, ebx;"
+        "stosd;"
+        "mov eax, ecx;"
+        "stosd;"
+        "mov eax, edx;"
+        "stosd;"
+        "mov eax, 0x80000004;"
+        "cpuid;"
+        "stosd;"
+        "mov eax, ebx;"
+        "stosd;"
+        :
+        : "D" (str)
+        : "rax", "rbx", "rcx", "rdx"
+    );
 }
