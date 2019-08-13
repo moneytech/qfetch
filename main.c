@@ -26,9 +26,6 @@
 
 #define RESET   "\e[0m"
 
-void img_printf(const char* img, const char* message, ...);
-void get_cpu_name(char *str);
-
 // Logo.
 const char* line1 = "   cccccccccccccccccccccccccccccccccccccccccc    ";
 const char* line2 = "   cccccccccccccccccccccccccccccccccccccccccc    ";
@@ -57,6 +54,9 @@ char hostname[1024] = {0}; // So we don't use 1 KiB of stack for a hostname.
 char dashes[1024]   = {0}; // Ditto.
 char cpuname[1024]  = {0}; // Ditto.
 
+void img_printf(const char* img, const char* message, ...);
+void get_cpu_name(char *str);
+
 int main(void) {
     // User and host.
     char* username = getpwuid(geteuid())->pw_name;
@@ -80,8 +80,14 @@ int main(void) {
     // Shell detection.
     char* shell = getpwuid(geteuid())->pw_shell;
 
+    // TODO: Resolution detection.
+    char* resolution = "Unknown";
+
     // CPU detection.
     get_cpu_name(cpuname);
+
+    // TODO: GPU detection.
+    char* gpu = "Generic VESA-capable device";
 
     // Print the info and logo.
     img_printf(line1, "");
@@ -93,9 +99,9 @@ int main(void) {
     img_printf(line7, "%sOS%s: %s (%s)", MAGENTA_FG, RESET, os, machine);
     img_printf(line8, "%sTerminal%s: %s", MAGENTA_FG, RESET, tty_name);
     img_printf(line9, "%sShell%s: %s", MAGENTA_FG, RESET, shell);
-    img_printf(lineA, "%sResolution%s: %s", MAGENTA_FG, RESET, "Unknown");
+    img_printf(lineA, "%sResolution%s: %s", MAGENTA_FG, RESET, resolution);
     img_printf(lineB, "%sCPU%s: %s", MAGENTA_FG, RESET, cpuname);
-    img_printf(lineC, "%sGPU%s: %s", MAGENTA_FG, RESET, "Generic VESA device");
+    img_printf(lineC, "%sGPU%s: %s", MAGENTA_FG, RESET, gpu);
     img_printf(lineD, "");
     img_printf(lineE, "%s   %s   %s   %s   %s   %s   %s   %s   %s", BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET);
     img_printf(lineF, "");
