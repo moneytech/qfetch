@@ -50,7 +50,8 @@ const char* lineK = "   cccccccccccccccccccccWWWWWNccccccccccccccc    ";
 const char* lineL = "   ccccccccccccccccccccccNNNNNccccccccccccccc    ";
 const char* lineM = "   cccccccccccccccccccccccccccccccccccccccccc    ";
 
-char hostname[1024] = {0}; // So we don't use 1 KiB of stack for a hostname.
+char username[1024] = {0}; // So we don't use 1 KiB of stack for a username.
+char hostname[1024] = {0}; // Ditto.
 char dashes[1024]   = {0}; // Ditto.
 char cpuname[1024]  = {0}; // Ditto.
 
@@ -59,7 +60,7 @@ void get_cpu_name(char *str);
 
 int main(void) {
     // User and host.
-    char* username = getpwuid(geteuid())->pw_name;
+    strcpy(username, getpwuid(geteuid())->pw_name);
     gethostname(hostname, 1024);
 
     // OS detection.
