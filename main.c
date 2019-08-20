@@ -108,7 +108,7 @@ int main(void) {
     img_printf(lineA, "%sResolution%s: %s", MAGENTA_FG, RESET, resolution);
     img_printf(lineB, "%sCPU%s: %s", MAGENTA_FG, RESET, cpuname);
     img_printf(lineC, "%sGPU%s: %s", MAGENTA_FG, RESET, gpu);
-    img_printf(lineD, "%sMemory%s: %lluMiB/%lluMiB", mem.used / (1024 * 1024), mem.total / (1024 * 1024));
+    img_printf(lineD, "%sMemory%s: %lluMiB/%lluMiB", MAGENTA_FG, RESET, mem.used / (1024 * 1024), mem.total / (1024 * 1024));
     img_printf(lineE, "");
     img_printf(lineF, "%s   %s   %s   %s   %s   %s   %s   %s   %s", BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET);
     img_printf(lineG, "");
