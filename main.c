@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <pwd.h>
 #include <sys/utsname.h>
+#include <qword/memstats.h>
 
 #define BLACK   "\e[40m"      /* Black */
 #define RED     "\e[41m"      /* Red */
@@ -54,6 +55,7 @@ char username[1024] = {0}; // So we don't use 1 KiB of stack for a username.
 char hostname[1024] = {0}; // Ditto.
 char dashes[1024]   = {0}; // Ditto.
 char cpuname[1024]  = {0}; // Ditto.
+struct memstats mem = {0}; // Memory stats.
 
 void img_printf(const char* img, const char* message, ...);
 void get_cpu_name(char *str);
@@ -90,6 +92,9 @@ int main(void) {
     // TODO: GPU detection.
     char* gpu = "Generic VESA-capable device";
 
+    // Memory detection.
+    getmemstats(&mem);
+
     // Print the info and logo.
     img_printf(line1, "");
     img_printf(line2, "");
@@ -103,9 +108,9 @@ int main(void) {
     img_printf(lineA, "%sResolution%s: %s", MAGENTA_FG, RESET, resolution);
     img_printf(lineB, "%sCPU%s: %s", MAGENTA_FG, RESET, cpuname);
     img_printf(lineC, "%sGPU%s: %s", MAGENTA_FG, RESET, gpu);
-    img_printf(lineD, "");
-    img_printf(lineE, "%s   %s   %s   %s   %s   %s   %s   %s   %s", BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET);
-    img_printf(lineF, "");
+    img_printf(lineD, "%sMemory%s: %lluMiB/%lluMiB", mem.used / (1024 * 1024), mem.total / (1024 * 1024));
+    img_printf(lineE, "");
+    img_printf(lineF, "%s   %s   %s   %s   %s   %s   %s   %s   %s", BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET);
     img_printf(lineG, "");
     img_printf(lineH, "");
     img_printf(lineI, "");
